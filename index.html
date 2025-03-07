@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wave Height Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <div id="map" style="height: calc(100vh - 5px)"></div>
+    <script>
+        const map = L.map('map').setView([0, 0], 2);
+        const apiEndpoint = 'http://127.0.0.1:8000/max_wave_height'
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        map.on('click', async function (event) {
+            const response = await fetch(`${apiEndpoint}?lat=${event.latlng.lat}&lon=${event.latlng.lng}`);
+            const data = await response.json();
+
+            alert(`Max Wave Height: ${data.max_wave_height}m at ${data.latitude}, ${data.longitude}`);
+        });
+    </script>
+</body>
+</html>
