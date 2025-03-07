@@ -14,10 +14,18 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
         map.on('click', async function (event) {
+          try {
             const response = await fetch(`${apiEndpoint}?lat=${event.latlng.lat}&lon=${event.latlng.lng}`);
             const data = await response.json();
 
-            alert(`Max Wave Height: ${data.max_wave_height}m at ${data.latitude}, ${data.longitude}`);
+            if (response.ok) {
+              alert(`Max Wave Height: ${data.max_wave_height}m at ${data.latitude}, ${data.longitude}`);
+            } else {
+              alert(data.detail);
+            }
+          } catch (error) {
+            alert("Something went wrong. Please try again.");
+          }
         });
     </script>
 </body>
